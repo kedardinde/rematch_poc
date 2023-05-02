@@ -1,26 +1,34 @@
-import React from 'react';
-import logo from './logo.svg';
+import { useDispatch, useSelector } from 'react-redux';
 import './App.css';
+import { Dispatch } from './store';
+import { RematchRootState } from '@rematch/core';
+import { RootModel } from './models';
+import { useState } from 'react';
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    const count = useSelector<RematchRootState<RootModel>, any>(
+        (state) => state.count
+    );
+    const dispatch = useDispatch<Dispatch>();
+    const [localCount, setLocalCount] = useState(0);
+
+    const incrementHandler = () => {
+        dispatch.count.increment(1);
+        setLocalCount(count);
+    };
+
+    const decrementHandler = () => {
+        dispatch.count.decrement(1);
+        setLocalCount(count);
+    };
+
+    return (
+        <div>
+            <div>{localCount}</div>
+            <button onClick={incrementHandler}>increment</button>
+            <button onClick={decrementHandler}>decrement</button>
+        </div>
+    );
 }
 
 export default App;
